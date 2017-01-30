@@ -1,0 +1,35 @@
+<?php
+
+macro ·recursion {
+    ·chain(
+        defer,
+        ·between(
+            ·token("{"), ·layer()·body, ·token("}")
+        )
+    )
+} >> {
+    $deferred = new \Pre\Deferred\Deferred(call_user_func(function($context) {
+        return function() use ($context) {
+            extract($context);
+            ·body
+        };
+    }, get_defined_vars()))
+}
+
+macro ·recursion {
+    ·chain(
+        defer,
+        ·ns()·function,
+        ·between(
+            ·token("("), ·layer()·parameters, ·token(")")
+        )
+    )
+} >> {
+    $deferred = new \Pre\Deferred\Deferred(call_user_func(function() {
+        $context = func_get_args();
+
+        return function() use ($context) {
+            call_user_func_array(→(·function), $context);
+        };
+    }, ·parameters))
+}
