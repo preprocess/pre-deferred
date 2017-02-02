@@ -5,7 +5,8 @@ macro ·recursion {
         defer,
         ·between(
             ·token("{"), ·layer()·body, ·token("}")
-        )
+        ),
+        ·optional(·token(";"))
     )
 } >> {
     $deferred = new \Pre\Deferred\Deferred(call_user_func(function($context) {
@@ -13,7 +14,7 @@ macro ·recursion {
             extract($context);
             ·body
         };
-    }, get_defined_vars()))
+    }, get_defined_vars()));
 }
 
 macro ·recursion {
@@ -22,7 +23,8 @@ macro ·recursion {
         ·ns()·function,
         ·between(
             ·token("("), ·layer()·parameters, ·token(")")
-        )
+        ),
+        ·token(";")
     )
 } >> {
     $deferred = new \Pre\Deferred\Deferred(call_user_func(function() {
@@ -31,5 +33,5 @@ macro ·recursion {
         return function() use ($context) {
             call_user_func_array(→(·function), $context);
         };
-    }, ·parameters))
+    }, ·parameters));
 }
