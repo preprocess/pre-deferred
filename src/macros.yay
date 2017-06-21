@@ -31,7 +31,7 @@ macro ·recursion {
         $context = func_get_args();
 
         return function() use ($context) {
-            call_user_func_array(→(·function), $context);
+            call_user_func_array(··stringify(·function), $context);
         };
     }, ·parameters));
 }

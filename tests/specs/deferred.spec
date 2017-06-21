@@ -21,9 +21,9 @@ $deferred·0 = new \Pre\Deferred\Deferred(call_user_func(function () {
     };
 }, "path/to/file"));
 
-$deferred·2 = new \Pre\Deferred\Deferred(call_user_func(function ($context·2) {
-    return function () use ($context·2) {
-        extract($context·2);
+$deferred·1 = new \Pre\Deferred\Deferred(call_user_func(function ($context·1) {
+    return function () use ($context·1) {
+        extract($context·1);
         fclose($handle);
         print "all done";
     };
