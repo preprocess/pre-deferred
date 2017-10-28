@@ -3,24 +3,20 @@
     "name": "pre/deferred",
     "license": "MIT",
     "require": {
-        "pre/plugin": "^0.7.3"
+        "pre/plugin": "^0.10.0"
     },
     "autoload": {
         "psr-4": {
-            "Pre\\Deferred\\": "src"
+            "Pre\\Deferred\\": "source"
         }
     },
     "require-dev": {
         "phpunit/phpunit": "^5.0|^6.0"
     },
     "autoload-dev": {
-        "psr-4": {
-            "Pre\\Deferred\\": "tests"
-        }
+        "files": ["tests/stubs.php"]
     },
     "extra": {
-        "macros": [
-            "src/macros.yay"
-        ]
+        "macros": ["source/macros.yay"]
     }
 }
