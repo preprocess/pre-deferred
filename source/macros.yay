@@ -1,0 +1,78 @@
+<?php
+
+macro ·recursion {
+    ·chain(
+        defer,
+        ·between(
+            ·token("{"), ·layer()·body, ·token("}")
+        ),
+        ·optional(·token(";")),
+        ·_()·scope,
+        ·_()·simple
+    )
+} >> function($ast) {
+    $bound = false;
+    $scope = new \Yay\Ast("·scope");
+
+    $pushed = [];
+
+    foreach ($ast->{"·body"} as $token) {
+        $name = $token->value();
+
+        if (!$token->is(T_VARIABLE)) {
+            continue;
+        }
+
+        if (isset($pushed[$name])) {
+            continue;
+        }
+
+        if (substr($name, 1) === "this") {
+            continue;
+        }
+
+        $scope->push(new \Yay\Ast("·var", $token));
+        $pushed[$name] = true;
+        $bound = true;
+    }
+
+    if ($bound) {
+      $ast->append($scope);
+    } else {
+      $simple = new \Yay\Ast("·simple");
+      $simple->push(new \Yay\Ast());
+
+      $ast->append($simple);
+    }
+} >> {
+    ··collapse(··trim(
+        ·scope ?·{
+            $deferred = new \Pre\Deferred\Deferred([·scope ···(, ) { ·var = ·var ?? null}, "fn" => function () use (··trim(·scope ···(, ) {&·var})) {
+                ··trim(·body)
+            }]["fn"]);
+        }
+
+        ·simple ?·{
+            $deferred = new \Pre\Deferred\Deferred(function () {
+                ··trim(·body)
+            });
+        }
+    ))
+}
+
+macro ·recursion {
+    ·chain(
+        defer,
+        ·ns()·function,
+        ·between(
+            ·token("("), ·layer()·parameters, ·token(")")
+        ),
+        ·token(";")
+    )
+} >> {
+    $deferred = ··unsafe(new \Pre\Deferred\Deferred((function (...$parameters) {
+        return function () use ($parameters) {
+            ·function(...$parameters);
+        };
+    })(·parameters)));
+}
