@@ -3,7 +3,7 @@
     "name": "pre/deferred",
     "license": "MIT",
     "require": {
-        "pre/plugin": "^0.10.0"
+        "pre/plugin": "*"
     },
     "autoload": {
         "psr-4": {
@@ -14,9 +14,24 @@
         "phpunit/phpunit": "^5.0|^6.0"
     },
     "autoload-dev": {
-        "files": ["tests/stubs.php"]
+        "files": [
+            "tests/stubs.php"
+        ]
     },
     "extra": {
-        "macros": ["source/macros.yay"]
-    }
+        "macros": [
+            "source/macros.yay"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../pre-plugin",
+            "options": {
+                "symlink": false
+            }
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

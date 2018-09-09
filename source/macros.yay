@@ -1,22 +1,22 @@
 <?php
 
-macro ·recursion {
-    ·chain(
+$(macro :recursion) {
+    $(chain(
         defer,
-        ·between(
-            ·token("{"), ·layer()·body, ·token("}")
+        between(
+            token("{"), layer() as body, token("}")
         ),
-        ·optional(·token(";")),
-        ·_()·scope,
-        ·_()·simple
-    )
+        optional(token(";")),
+        _() as scope,
+        _() as simple
+    ))
 } >> function($ast) {
     $bound = false;
-    $scope = new \Yay\Ast("·scope");
+    $scope = new \Yay\Ast("scope");
 
     $pushed = [];
 
-    foreach ($ast->{"·body"} as $token) {
+    foreach ($ast->{"body"} as $token) {
         $name = $token->value();
 
         if (!$token->is(T_VARIABLE)) {
@@ -31,7 +31,7 @@ macro ·recursion {
             continue;
         }
 
-        $scope->push(new \Yay\Ast("·var", $token));
+        $scope->push(new \Yay\Ast("var", $token));
         $pushed[$name] = true;
         $bound = true;
     }
@@ -39,40 +39,40 @@ macro ·recursion {
     if ($bound) {
       $ast->append($scope);
     } else {
-      $simple = new \Yay\Ast("·simple");
+      $simple = new \Yay\Ast("simple");
       $simple->push(new \Yay\Ast());
 
       $ast->append($simple);
     }
 } >> {
-    ··collapse(··trim(
-        ·scope ?·{
-            $deferred = new \Pre\Deferred\Deferred([·scope ···(, ) { ·var = ·var ?? null}, "fn" => function () use (··trim(·scope ···(, ) {&·var})) {
-                ··trim(·body)
+    $$(collapse($$(trim(
+        $(scope ? {
+            $deferred = new \Pre\Deferred\Deferred([$(scope ... (, ) {$$(trim($(var) = $(var) ?? null))}), "fn" => function () use ($(scope ... (, ) {&$(var)})) {
+                $$(trim($(body)))
             }]["fn"]);
-        }
+        })
 
-        ·simple ?·{
+        $(simple ? {
             $deferred = new \Pre\Deferred\Deferred(function () {
-                ··trim(·body)
+                $$(trim($(body)))
             });
-        }
-    ))
+        })
+    ))))
 }
 
-macro ·recursion {
-    ·chain(
+$(macro :recursion) {
+    $(chain(
         defer,
-        ·ns()·function,
-        ·between(
-            ·token("("), ·layer()·parameters, ·token(")")
+        ns() as function,
+        between(
+            token("("), layer() as parameters, token(")")
         ),
-        ·token(";")
-    )
+        token(";")
+    ))
 } >> {
-    $deferred = ··unsafe(new \Pre\Deferred\Deferred((function (...$parameters) {
+    $deferred = $$(unsafe(new \Pre\Deferred\Deferred((function (...$parameters) {
         return function () use ($parameters) {
-            ·function(...$parameters);
+            $(function)(...$parameters);
         };
-    })(·parameters)));
+    })($(parameters)))));
 }
