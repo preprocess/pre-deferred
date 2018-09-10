@@ -7,8 +7,7 @@ $(macro :recursion) {
             token("{"), layer() as body, token("}")
         ),
         optional(token(";")),
-        _() as scope,
-        _() as simple
+        _() as scope
     ))
 } >> function($ast) {
     $bound = false;
@@ -38,11 +37,6 @@ $(macro :recursion) {
 
     if ($bound) {
       $ast->append($scope);
-    } else {
-      $simple = new \Yay\Ast("simple");
-      $simple->push(new \Yay\Ast());
-
-      $ast->append($simple);
     }
 } >> {
     $$(collapse($$(trim(
@@ -52,7 +46,7 @@ $(macro :recursion) {
             }]["fn"]);
         })
 
-        $(simple ? {
+        $(scope ! {
             $deferred = new \Pre\Deferred\Deferred(function () {
                 $$(trim($(body)))
             });
