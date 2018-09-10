@@ -4,9 +4,6 @@ namespace Pre\Deferred;
 
 final class Deferred
 {
-    /**
-     * @var callable
-     */
     private $deferred;
 
     public function __construct(callable $deferred)

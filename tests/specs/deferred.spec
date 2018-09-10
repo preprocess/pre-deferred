@@ -2,7 +2,7 @@ defer unlink("path/to/file");
 
 ~~~
 
-$deferred·0 = new \Pre\Deferred\Deferred((function (...$parameters) {
+$deferred___0 = new \Pre\Deferred\Deferred((function (...$parameters) {
     return function () use ($parameters) {
         unlink(...$parameters);
     };
@@ -17,7 +17,7 @@ defer {
 
 ~~~
 
-$deferred·0 = new \Pre\Deferred\Deferred([$handle = $handle ?? null, "fn" => function () use (&$handle) {
+$deferred___0 = new \Pre\Deferred\Deferred([$handle = $handle ?? null, "fn" => function () use (&$handle) {
     fclose($handle);
     print "all done";
 }]["fn"]);
